@@ -75,13 +75,10 @@ final class ClockifyService
     |--------------------------------------------------------------------------
     */
 
-    public static function getAllTimeEntries(): array
+    public static function getTimeEntries(): array
     {
-        $workspaceId = config('clockify.workspace_id');
-        $userId = config('clockify.user_id');
-
         return self::http()
-            ->get(config('clockify.url')."/v1/workspaces/{$workspaceId}/user/{$userId}/time-entries")
+            ->get(self::userUrl().'/time-entries')
             ->json();
     }
 
@@ -91,16 +88,13 @@ final class ClockifyService
             $date = Carbon::parse($date);
         }
 
-        $workspaceId = config('clockify.workspace_id');
-        $userId = config('clockify.user_id');
-
         return self::http()
             ->withQueryParameters([
                 'start' => $date->copy()->startOfDay()->toIso8601String(),
                 'end' => $date->copy()->endOfDay()->toIso8601String(),
                 'page-size' => 250,
             ])
-            ->get(config('clockify.url')."/v1/workspaces/{$workspaceId}/user/{$userId}/time-entries")
+            ->get(self::userUrl().'/time-entries')
             ->json();
 
     }

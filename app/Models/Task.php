@@ -12,6 +12,7 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'name',
         'project_id',
         'payload',
@@ -20,6 +21,7 @@ class Task extends Model
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'payload' => 'object',
         ];
     }

@@ -12,6 +12,7 @@ class TimeEntry extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'description',
         'project_id',
         'task_id',
@@ -23,6 +24,7 @@ class TimeEntry extends Model
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'start_at' => 'timestamp',
             'end_at' => 'timestamp',
             'payload' => 'object',

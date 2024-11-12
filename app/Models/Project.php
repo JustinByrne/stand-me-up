@@ -12,6 +12,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'name',
         'payload',
     ];
@@ -19,6 +20,7 @@ class Project extends Model
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'payload' => 'object',
         ];
     }

@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->unique(true)->primary(true);
             $table->string('name');
-            $table->foreignId('project_id')->nullable()->constrained('projects');
+            $table->string('project_id');
             $table->json('payload');
             $table->timestamps();
+
+            $table->foreign('project_id')->references('id')->on('projects');
         });
     }
 

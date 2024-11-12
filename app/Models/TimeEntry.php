@@ -11,6 +11,10 @@ class TimeEntry extends Model
     /** @use HasFactory<\Database\Factories\TimeEntryFactory> */
     use HasFactory;
 
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     protected $fillable = [
         'id',
         'description',
@@ -24,7 +28,6 @@ class TimeEntry extends Model
     protected function casts(): array
     {
         return [
-            'id' => 'string',
             'start_at' => 'timestamp',
             'end_at' => 'timestamp',
             'payload' => 'object',

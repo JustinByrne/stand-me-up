@@ -11,6 +11,10 @@ class Task extends Model
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory;
 
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     protected $fillable = [
         'id',
         'name',
@@ -21,7 +25,6 @@ class Task extends Model
     protected function casts(): array
     {
         return [
-            'id' => 'string',
             'payload' => 'object',
         ];
     }

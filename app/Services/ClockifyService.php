@@ -71,6 +71,46 @@ final class ClockifyService
 
     /*
     |--------------------------------------------------------------------------
+    | Project functions
+    |--------------------------------------------------------------------------
+    */
+
+    public static function getProjects(): array
+    {
+        return self::http()
+            ->get(self::workspaceUrl().'/projects')
+            ->json();
+    }
+
+    public static function getProjectById(string $projectId): array
+    {
+        return self::http()
+            ->get(self::workspaceUrl()."/projects/{$projectId}")
+            ->json();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Task functions
+    |--------------------------------------------------------------------------
+    */
+
+    public static function getTasks(string $projectId): array
+    {
+        return self::http()
+            ->get(self::workspaceUrl()."/projects/{$projectId}/tasks")
+            ->json();
+    }
+
+    public static function getTaskById(string $projectId, string $taskId): array
+    {
+        return self::http()
+            ->get(self::workspaceUrl()."/projects/{$projectId}/tasks/{$taskId}")
+            ->json();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Time entry functions
     |--------------------------------------------------------------------------
     */

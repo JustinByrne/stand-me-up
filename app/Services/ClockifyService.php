@@ -15,6 +15,20 @@ final class ClockifyService
             ]);
     }
 
+    private static function workspaceUrl(): string
+    {
+        $workspaceId = config('clockify.workspace_id');
+
+        return config('clockify.url')."/v1/workspaces/{$workspaceId}";
+    }
+
+    private static function userUrl(): string
+    {
+        $userId = config('clockify.user_id');
+
+        return self::workspaceUrl()."/user/{$userId}";
+    }
+
     /*
     |--------------------------------------------------------------------------
     | User functions

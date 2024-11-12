@@ -55,10 +55,10 @@ final class ClockifyService
             ->json();
     }
 
-    public static function getWorkspaceById(string $id): array
+    public static function getWorkspaceById(string $workspaceId): array
     {
         return self::http()
-            ->get(config('clockify.url').'/v1/workspaces/'.$id)
+            ->get(config('clockify.url').'/v1/workspaces/'.$workspaceId)
             ->json();
     }
 

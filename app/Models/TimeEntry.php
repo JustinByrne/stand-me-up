@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,34 @@ class TimeEntry extends Model
             'end_at' => 'timestamp',
             'payload' => 'object',
         ];
+    }
+
+    protected function formattedDescription(): Attribute
+    {
+        return Attribute::make(function (): string {
+            $issuePattern = '/^[A-Za-z]+-[0-9]+/';
+
+            preg_match($issuePattern, $this->description, $matches);
+
+            if (! $matches) {
+                return $this->description;
+            }
+
+            $issue = $matches[0];
+            $issueLink = '<a href="'.config('repo.url').'/'.$issue.'">'.$issue.'</a>';
+            $message = substr($this->description, strlen($issue));
+            $taskName = strtolower($this->task->name);
+
+            if (in_array($taskName, config('clockify.testing_tasks'))) {
+                $message = 'acceptance testing';
+            }
+
+            if (in_array($taskName, config('clockify.reviewing_tasks'))) {
+                $message = 'PR Review';
+            }
+
+            return $issueLink.' - '.$message;
+        });
     }
 
     public function project(): BelongsTo

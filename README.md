@@ -1,66 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Stand me up
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project helps generate stand-up responses by fetching time entries from
+[Clockify](https://clockify.me/). It utilizes the Clockify API to gather
+information about your tasks and automatically generates a stand-up report.
 
-## About Laravel
+## Features
+- Fetches time entries from Clockify.
+- Generates stand-up responses based on your activity.
+- Requires minimal setup using environment variables.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
+- [Node.js](https://nodejs.org/)
+- [PHP](https://www.php.net/)
+- A Clockify account with an API key.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting Started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. Clone the Repository
 
-## Learning Laravel
+```bash
+git clone https://github.com/JustinByrne/stand-me-up
+cd ./stand-me-up
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Install Dependencies
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Make sure to run the following command to install all necessary dependencies:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+npm install
+composer install
+```
 
-## Laravel Sponsors
+### 3. Set up Environment Variables
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Create a `.env` file in the root directory and add your Clockify credentials:
 
-### Premium Partners
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Then update the following
 
-## Contributing
+```env
+CLOCKIFY_API_KEY="your_clockify_api_key"
+CLOCKIFY_USER_ID="your_clockify_user_id"
+CLOCKIFY_WORKSPACE_ID="your_clockify_workspace_id"
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+REPO_URL="repo_url_used_to_link_issues"
+```
 
-## Code of Conduct
+#### How to get your Clockify API Key
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Log in to your Clockify account.
+2. Go to the [Clockify Profile Settings](https://clockify.me/user/settings).
+3. Scroll down to the **API** section and copy your API key.
 
-## Security Vulnerabilities
+#### How to get your User ID and Workspace ID
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Once you've added your Clockify API Key to the `.env` file, start your
+application.
+2. Visit the `/ids` route in your browser (e.g., http://localhost:8000/ids).
+3. Copy the `user_id` and `workspace_id` from the displayed results.
+
+### 4. Setup the Database
+
+The application can use SQLite to make it easier to run, when running the
+following, make sure to allow the application to create the database for you.
+
+```bash
+php artisan migrate
+```
+
+### 5. Run the Application
+
+```bash
+composer run dev
+```
+
+### 6. Generate Stand-up Report
+
+By default the home page will show yesterdays entries, however the date can be
+changed to get an alternative date.
+
+## Basic Usage
+
+By default the application with format the description of a time entry and wrap
+the issue number within an anchor tag, this is based on a `ABC-123` style issue
+number.
+
+Additionally the application will change descriptions of testing and pr review
+tasks accordingly, however, if the task names don't match these can be added
+into the `.env` file as a lower case comma separated list as needed.
+
+```env
+CLOCKIFY_TESTING_TASKS="testing,acceptance testing"
+CLOCKIFY_REVIEWING_TASKS="pr review"
+```
 
 ## License
+This project is licensed under the [MIT License](LICENSE).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Support
+If you encounter any issues, feel free to open a
+[GitHub Issue](https://github.com/JustinByrne/stand-me-up/issues).
+
+## Acknowledgements
+- [Clockify API Documentation](https://clockify.me/developers-api)
+- [Laravel Documentation](https://laravel.com/docs)
+- [Node.js Documentation](https://nodejs.org/en/docs/)

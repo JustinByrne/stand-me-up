@@ -6,6 +6,7 @@ use App\Models\TimeEntry;
 use App\Services\ClockifyService;
 use App\Services\TimeEntryService;
 use Carbon\Carbon;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -23,6 +24,7 @@ class TimeEntryList extends Component
         }
     }
 
+    #[Title('My Stand Up')]
     public function render()
     {
         $date = Carbon::createFromFormat('Y-m-d', $this->date);

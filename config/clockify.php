@@ -46,4 +46,28 @@ return [
 
     'user_id' => env('CLOCKIFY_USER_ID'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Testing tasks
+    |--------------------------------------------------------------------------
+    |
+    | This is an array of testing task types, this is from a comma seperated
+    | list.
+    |
+    */
+
+    'testing_tasks' => explode(',', env('CLOCKIFY_TESTING_TASKS', 'testing')),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reviewing tasks
+    |--------------------------------------------------------------------------
+    |
+    | This is an array of reviewing task types, this is from a comma seperated
+    | list.
+    |
+    */
+
+    'reviewing_tasks' => explode(',', env('CLOCKIFY_REVIEWING_TASKS', 'pr review')),
+
 ];

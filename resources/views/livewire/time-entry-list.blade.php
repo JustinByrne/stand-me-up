@@ -30,7 +30,7 @@
         </ul>
 
         @if (!count($timeEntries))
-            <div class="text-sm/6">
+            <div class="text-sm/6" wire:loading.remove>
                 No entries for this date
             </div>
         @endif

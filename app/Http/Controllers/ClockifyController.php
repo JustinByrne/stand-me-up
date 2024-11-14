@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\EnvService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
 class ClockifyController extends Controller
@@ -24,6 +25,8 @@ class ClockifyController extends Controller
             return redirect()->route('missing-token')
                 ->with('message', 'Failed to update env file');
         }
+
+        Config::set('clockify.api_key', $request->api_key);
 
         return redirect('/ids');
     }

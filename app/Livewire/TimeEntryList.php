@@ -29,6 +29,53 @@ class TimeEntryList extends Component
     {
         $date = Carbon::createFromFormat('Y-m-d', $this->date);
 
+        $this->storeTimeEntries($date);
+
+        $timeEntries = [];
+
+        TimeEntry::with(['task'])
+            ->where('start_at', 'like', $date->format('Y-m-d').'%')
+            ->get()
+            ->each(function (TimeEntry $entry) {
+                $entry->append(['linked_issue', 'formatted_description']);
+            })
+            ->groupBy(['task.name', 'description'])
+            ->each(function ($collection, $task) use (&$timeEntries) {
+                if (
+                    in_array(strtolower($task), config('clockify.reviewing_tasks')) ||
+                    in_array(strtolower($task), config('clockify.testing_tasks'))
+                ) {
+                    $taskList = '';
+                    foreach ($collection->toArray() as $entry) {
+                        if (strlen($taskList)) {
+                            $taskList .= ', ';
+                        }
+
+                        $taskList .= $entry[0]['linked_issue'];
+                    }
+
+                    if (in_array(strtolower($task), config('clockify.testing_tasks'))) {
+                        $task = 'acceptance testing';
+                    }
+
+                    if (in_array(strtolower($task), config('clockify.reviewing_tasks'))) {
+                        $task = 'PR Review';
+                    }
+
+                    $timeEntries[] = $taskList.' - '.$task;
+
+                    return;
+                }
+
+                $timeEntries[] = $collection->first()[0]['formatted_description'];
+            });
+
+        return view('livewire.time-entry-list')
+            ->with('timeEntries', $timeEntries);
+    }
+
+    private function storeTimeEntries(Carbon $date): void
+    {
         collect(ClockifyService::getTimeEntriesByDate($date))->each(function (array $entry) {
             $timeEntry = TimeEntry::find($entry['id']);
 
@@ -49,16 +96,5 @@ class TimeEntryList extends Component
                 'payload' => $entry,
             ]);
         });
-
-        $timeEntries = TimeEntry::with([
-            'project',
-            'task',
-        ])
-            ->where('start_at', 'like', $date->format('Y-m-d').'%')
-            ->groupBy('description')
-            ->get();
-
-        return view('livewire.time-entry-list')
-            ->with('timeEntries', $timeEntries);
     }
 }

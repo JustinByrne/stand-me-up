@@ -16,7 +16,7 @@
         <ul class="pl-4 list-disc" wire:loading.remove>
             @foreach ($timeEntries as $entry)
                 <li class="text-sm/6">
-                    {!! $entry->formatted_description !!}
+                    {!! $entry !!}
                 </li>
             @endforeach
         </ul>

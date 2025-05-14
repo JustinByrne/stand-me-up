@@ -47,7 +47,7 @@ class TimeEntry extends Model
             }
 
             $issue = $matches[0];
-            $issueLink = '<a href="'.config('repo.url').'/'.$issue.'">'.$issue.'</a>';
+            $issueLink = $this->linked_issue;
             $message = substr($this->description, strlen($issue));
             $taskName = strtolower($this->task->name);
 
@@ -60,6 +60,23 @@ class TimeEntry extends Model
             }
 
             return $issueLink.' - '.$message;
+        });
+    }
+
+    protected function linkedIssue(): Attribute
+    {
+        return Attribute::make(function (): ?string {
+            $issuePattern = '/^[A-Za-z]+-[0-9]+/';
+
+            preg_match($issuePattern, $this->description, $matches);
+
+            if (! $matches) {
+                return null;
+            }
+
+            $issue = $matches[0];
+
+            return '<a href="'.config('repo.url').'/'.$issue.'">'.$issue.'</a>';
         });
     }
 
